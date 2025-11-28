@@ -1,0 +1,14 @@
+{
+  "name": "snake-game",
+  "version": "1.0.0",
+  "description": "Single-player Snake game (Node.js + Tailwind CDN)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "generated",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
