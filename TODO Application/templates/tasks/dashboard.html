@@ -1,0 +1,55 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Dashboard</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+  <div class="bg-white p-4 rounded shadow">
+    <div class="text-sm text-gray-600">Created (7d)</div>
+    <div class="text-2xl font-bold">{{ tasks_created_week }}</div>
+  </div>
+  <div class="bg-white p-4 rounded shadow">
+    <div class="text-sm text-gray-600">Resolved (7d)</div>
+    <div class="text-2xl font-bold">{{ tasks_resolved_week }}</div>
+  </div>
+  <div class="bg-white p-4 rounded shadow">
+    <div class="text-sm text-gray-600">Overdue</div>
+    <div class="text-2xl font-bold">{{ overdue_week }}</div>
+  </div>
+</div>
+
+<div class="bg-white p-4 rounded shadow mb-6">
+  <canvas id="tasksByDay" height="100"></canvas>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+  <canvas id="priorityPie" height="100"></canvas>
+</div>
+
+<script>
+  const labels = {{ tasks_by_day_labels| safe }};
+  const data = {{ tasks_by_day_data| safe }};
+
+  const ctx = document.getElementById('tasksByDay').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Tasks created',
+        data: data,
+        backgroundColor: 'rgba(59,130,246,0.7)'
+      }]
+    }
+  });
+
+  const pLabels = {{ priority_labels| safe }};
+  const pData = {{ priority_counts| safe }};
+  const ctx2 = document.getElementById('priorityPie').getContext('2d');
+  new Chart(ctx2, {
+    type: 'pie',
+    data: { labels: pLabels, datasets: [{ data: pData, backgroundColor: ['#60A5FA', '#FBBF24', '#F87171'] }] }
+  });
+</script>
+
+{% endblock %}

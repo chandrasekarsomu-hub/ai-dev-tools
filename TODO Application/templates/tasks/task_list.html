@@ -1,0 +1,51 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Tasks</h1>
+
+<div class="mb-4 flex gap-2">
+  <a href="?status=pending" class="px-2 py-1 bg-gray-200 rounded">Pending</a>
+  <a href="?status=resolved" class="px-2 py-1 bg-gray-200 rounded">Resolved</a>
+  <a href="?status=overdue" class="px-2 py-1 bg-gray-200 rounded">Overdue</a>
+  <a href="?sort=due" class="px-2 py-1 bg-gray-200 rounded">Sort: Due</a>
+  <a href="?sort=priority" class="px-2 py-1 bg-gray-200 rounded">Sort: Priority</a>
+</div>
+
+<div class="bg-white rounded shadow p-4">
+  <ul>
+    {% for task in object_list %}
+    <li class="border-b py-2 flex justify-between items-center">
+      <div>
+        <a href="{{ task.get_absolute_url|default:'#' }}" class="font-semibold">{{ task.title }}</a>
+        <div class="text-sm text-gray-600">Due: {{ task.due_date }} • Priority: {{ task.priority|capfirst }}</div>
+      </div>
+      <div class="flex items-center gap-2">
+        {% if task.status == 'pending' %}
+        <a href="/task/{{ task.id }}/resolve/" class="px-2 py-1 bg-green-500 text-white rounded text-sm">Mark
+          Resolved</a>
+        {% endif %}
+        <a href="/task/{{ task.id }}/edit/" class="px-2 py-1 bg-yellow-400 text-white rounded text-sm">Edit</a>
+        <a href="/task/{{ task.id }}/delete/" class="px-2 py-1 bg-red-500 text-white rounded text-sm">Delete</a>
+      </div>
+    </li>
+    {% empty %}
+    <li>No tasks yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div class="mt-4">
+  {% if is_paginated %}
+  <div class="flex justify-between">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">Next</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

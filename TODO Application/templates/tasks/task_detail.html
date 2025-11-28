@@ -1,0 +1,23 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">{{ object.title }}</h1>
+<div class="bg-white rounded shadow p-4">
+  <p class="text-gray-700">{{ object.description }}</p>
+  <div class="mt-2 text-sm text-gray-600">Due: {{ object.due_date }}</div>
+  <div class="text-sm text-gray-600">Priority: {{ object.priority|capfirst }}</div>
+  <div class="text-sm text-gray-600">Status: {{ object.status|capfirst }}</div>
+  <div class="text-sm text-gray-600">Created: {{ object.created_at }}</div>
+  <div class="text-sm text-gray-600">Updated: {{ object.updated_at }}</div>
+  {% if object.resolved_at %}
+  <div class="text-sm text-gray-600">Resolved: {{ object.resolved_at }}</div>
+  {% endif %}
+  <div class="mt-4 flex gap-2">
+    {% if object.status == 'pending' %}
+    <a href="/task/{{ object.id }}/resolve/" class="px-2 py-1 bg-green-500 text-white rounded">Mark Resolved</a>
+    {% endif %}
+    <a href="/task/{{ object.id }}/edit/" class="px-2 py-1 bg-yellow-400 text-white rounded">Edit</a>
+    <a href="/task/{{ object.id }}/delete/" class="px-2 py-1 bg-red-500 text-white rounded">Delete</a>
+  </div>
+</div>
+{% endblock %}
